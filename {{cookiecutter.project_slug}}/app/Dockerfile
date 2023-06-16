@@ -2,6 +2,10 @@ FROM tiangolo/uvicorn-gunicorn-fastapi:python3.11
 
 WORKDIR /app/
 
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
 # Install Poetry
 RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python && \
     cd /usr/local/bin && \
