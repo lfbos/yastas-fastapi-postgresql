@@ -1,7 +1,15 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
+# Exit in case of error
 set -e
-set -x
 
-# app/tests
-pytest -W ignore::DeprecationWarning $1
+docker-compose down -v --remove-orphans # Remove possibly previous broken stacks left hanging after an error
+
+if [ $(uname -s) = "Linux" ]; then
+    echo "Remove __pycache__ files"
+    sudo find . -type d -name __pycache__ -exec rm -r {} \+
+fi
+
+docker compose build
+docker compose up -d
+docker compose exec -T api bash /app/tests-start.sh $1
